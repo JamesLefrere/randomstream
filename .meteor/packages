@@ -2,3 +2,6 @@ standard-app-packages
 accounts-base
 accounts-password
 iron-router
+streams
+http
+npm
