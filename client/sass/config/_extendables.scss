@@ -1,0 +1,36 @@
+%clearfix {
+	zoom:1;
+	&:before, &:after {
+		content: "\0020";
+		display: block;
+		height: 0;
+		overflow: hidden;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+%small {
+	font-size: 11px;
+}
+
+%transition {
+	@include transition(all 0.5s ease);
+}
+
+%link {
+	@extend %transition;
+	color: $link;
+	text-decoration: none;
+	cursor: pointer;
+	&:hover, &:focus {
+		color: white;
+	}
+}
+
+%space {
+	margin-bottom: 8px;
+	padding: 4px 8px 0 8px;
+	border-top: 1px $background solid;
+}

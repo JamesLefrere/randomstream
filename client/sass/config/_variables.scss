@@ -1,0 +1,24 @@
+// Layout
+$min-width: 320px;
+$max-width: 1140px;
+
+// Singularity
+//@include sgs-change($setting, $value);
+@include add-grid(12);
+@include add-gutter(0.15);
+
+// Breakpoints
+$s: 320px;
+$m: 490px;
+$l: 970px;
+$xl: 1080px;
+$touch: 'pointer coarse';
+
+// Colour
+$link: #ffffff;
+$body: #84899b;
+$background: #2b243b;
+$user1: #adeb00;
+$user2: #eb6900;
+$user3: #a425eb;
+$user4: #00cbeb;
