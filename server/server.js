@@ -4,7 +4,7 @@ var Fiber = Npm.require('fibers');
 Meteor.methods({
   getStream: function () {
 	  this.unblock();
-	  return Meteor.http.call('GET', 'http://api.ustream.tv/json/stream/all/getRandom?key=F529A1377B4F8A45B55EC457A2B0648B');
+	  return Meteor.http.call('GET', 'http://api.ustream.tv/json/stream/all/getRandom?key=F529A1377B4F8A45B55EC457A2B0648B&params=autoplay:true;height:100;width:100');
   }
 });
 

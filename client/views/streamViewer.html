@@ -1,13 +1,12 @@
 <template name="streamViewer">
+	<div class="stream">
+		{{{stream.iframe}}}
+	</div>
 	<div class="stream-viewer">
 		{{#with stream}}
-			<h2>{{title}}</h2>
-			<h3>{{userName}}</h3>
-			<p><a href="{{url}}">{{urlTitleName}}</a></p>
-			<p>Viewers: {{currentNumberOfViewers}}</p>
-			<div class="embed">
-				{{{embedTag}}}
-			</div>
+			<h1>{{title}}</h1>
+			<p><a href="{{url}}">{{userName}}</a></p>
+			<p>{{currentNumberOfViewers}} viewers</p>
 		{{/with}}
 	</div>
 </template>
