@@ -1,5 +1,18 @@
+var Schedule = Meteor.require('node-schedule');
+var Fiber = Npm.require('fibers');
+
 Meteor.methods({
-  insertRandomPost: function() {
-    Posts.insert({title: 'Test Post ' + Math.floor(Math.random()*10), ts: +new Date});
+  getStream: function () {
+	  this.unblock();
+	  return Meteor.http.call('GET', 'http://api.ustream.tv/json/stream/all/getRandom?key=F529A1377B4F8A45B55EC457A2B0648B');
   }
-})
+});
+
+var rule = new Schedule.RecurrenceRule();
+rule.second = [0, 30];
+
+var job = Schedule.scheduleJob(rule, function () {
+	Fiber(function () {
+		VideoStream.emit('newStream', Meteor.call('getStream'));
+	}).run();
+});
