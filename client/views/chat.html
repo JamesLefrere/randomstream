@@ -2,16 +2,13 @@
 	<div class="chat">
 		{{#if currentUser}}
 		<form id="chat-form" action="">
-			<textarea name="chat-text" id="chat-text" rows="3"></textarea>
+			<textarea name="chat-text" id="chat-text" rows="3" disabled="disabled"></textarea>
 		</form>
 		{{/if}}
-		{{#each messages}}
-			<div class="username">
-				{{username}}
-			</div>
-			<div class="message">
-				{{message}}
-			</div>
-		{{/each}}
+		<div class="chat-inner">
+			{{#each messages}}
+			{{> message}}
+			{{/each}}
+		</div>
 	</div>
 </template>

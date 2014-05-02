@@ -38,5 +38,18 @@ Template.chat.rendered = function () {
 		$chatText.shiftenter({
 			hint: null
 		});
-	}, 1000);
+		$chatText.removeAttr('disabled');
+		Template.chat.resize();
+	}, 1500);
 };
+
+Template.chat.resize = function () {
+	var $wrapper = $('.chat-inner');
+	if ($wrapper.length) {
+		$wrapper.css('height', $(window).height() - $wrapper.offset().top);
+	}
+};
+
+$(window).resize(function () {
+	Template.chat.resize();
+});

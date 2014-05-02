@@ -4,7 +4,7 @@ input, textarea {
 	border: 1px transparent solid;
 	font-family: sans-serif;
 	padding: 2px 4px;
-	color: $body;
+	color: $background;
 	outline: none;
 	&:hover, &:focus {
 		border-color: $link;
@@ -20,6 +20,23 @@ label {
 	font-size: 12px;
 }
 
-.shiftenterInactive, .shiftenter {
-//	display: none;
+body::-webkit-scrollbar {
+	display: none;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+.chat-inner:hover::-webkit-scrollbar-thumb {
+	background: rgba($body, 1);
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba($body, 0.3);
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+	display: none;
 }
