@@ -1,5 +1,23 @@
 var Schedule = Meteor.require('node-schedule');
 var Fiber = Npm.require('fibers');
+var timer;
+var waitTime = 60000;
+var streamQueueIndex = 0;
+var streamQueueLimit = 100;
+
+var setTimer = function () {
+	timer = Meteor.setInterval(function () {
+		VideoStream.emit('newStream', Meteor.call('nextStream'));
+	}, waitTime);
+};
+
+var clearTimer = function () {
+	Meteor.clearInterval(timer);
+};
+
+Meteor.startup(function () {
+	setTimer();
+});
 
 Meteor.methods({
   getStream: function () {
