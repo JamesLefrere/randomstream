@@ -6,6 +6,9 @@
   "packages": {
     "iron-router": {},
     "streams": {},
-    "npm": {}
+    "npm": {},
+    "presence": {},
+    "font-awesome": {},
+    "session-extended-api": {}
   }
 }

@@ -5,3 +5,7 @@ iron-router
 streams
 http
 npm
+accounts-ui-unstyled
+presence
+font-awesome
+session-extended-api
