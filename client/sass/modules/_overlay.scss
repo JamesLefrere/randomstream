@@ -1,8 +1,40 @@
 .overlay {
-	position: fixed;
-	top: 10px;
-	right: 10px;
+	@extend %transition;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
 	width: 320px;
 	padding: 10px;
+	background: rgba($background, 0.8);
+	.fa-toggle-left {
+		display: none;
+	}
+	&.hidden {
+		right: -320px;
+		.fa-toggle-right {
+			display: none;
+		}
+		.fa-toggle-left {
+			display: block;
+		}
+	}
+}
+
+.overlay-toggle {
+	@extend %transition;
+	position: absolute;
+	left: -36px;
+	width: 36px;
+	height: 40px;
 	background: rgba($background, 0.4);
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+	&:hover {
+		background: rgba($background, 0.8);
+	}
+	.fa {
+		padding: 10px;
+		font-size: 20px;
+	}
 }
