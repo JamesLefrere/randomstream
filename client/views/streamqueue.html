@@ -1,0 +1,13 @@
+<template name="streamQueue">
+	<div class="stream-queue">
+		{{#if currentUser}}
+		<form id="queue-form" action="">
+			<input type="url" name="queue-url" id="queue-url" placeholder="Submit URL (Youtube, Twitch, uStream)" />
+		</form>
+		{{/if}}
+		<h3>Queue</h3>
+		{{#each queueItems}}
+			{{> queueItem}}
+		{{/each}}
+	</div>
+</template>
