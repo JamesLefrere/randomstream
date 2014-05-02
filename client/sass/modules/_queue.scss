@@ -1,0 +1,20 @@
+#queue-url {
+	width: 100%;
+}
+
+.queue-item {
+	.content {
+		font-size: 12px;
+		color: $body;
+	}
+	.username {
+		font-size: 10px;
+		color: $fade;
+		margin-right: 10px;
+	}
+	&.is-me {
+		.content {
+			color: $highlight !important;
+		}
+	}
+}
