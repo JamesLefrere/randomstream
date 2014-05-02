@@ -26,3 +26,13 @@ p {
 a {
 	@extend %link;
 }
+
+.fa {
+	@extend %transition;
+	cursor: pointer;
+	font-size: 16px;
+	color: $link;
+	&:hover {
+		color: $highlight;
+	}
+}

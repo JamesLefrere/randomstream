@@ -1,16 +1,25 @@
 input, textarea {
 	@extend %transition;
 	margin: 0 0 10px 0;
-	background: transparent;
-	border: 1px $link solid;
-	border-left: none;
-	border-right: none;
+	border: 1px transparent solid;
 	font-family: sans-serif;
 	padding: 2px 4px;
 	color: $body;
 	outline: none;
 	&:hover, &:focus {
-		border-color: transparent;
-		background: $background;
+		border-color: $link;
 	}
+}
+
+textarea {
+	max-height: 94px;
+	min-height: 31px;
+}
+
+label {
+	font-size: 12px;
+}
+
+.shiftenterInactive, .shiftenter {
+//	display: none;
 }
