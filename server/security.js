@@ -5,3 +5,11 @@ VideoStream.permissions.write(function (eventName) {
 VideoStream.permissions.read(function (eventName) {
 	return true;
 });
+
+ChatStream.permissions.write(function (eventName) {
+	return true;
+});
+
+ChatStream.permissions.read(function (eventName) {
+	return true;
+});
