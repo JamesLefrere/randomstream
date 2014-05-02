@@ -9,6 +9,7 @@
     "npm": {},
     "presence": {},
     "font-awesome": {},
-    "session-extended-api": {}
+    "session-extended-api": {},
+    "event-hooks": {}
   }
 }
