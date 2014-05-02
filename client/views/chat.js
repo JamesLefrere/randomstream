@@ -16,17 +16,18 @@ Template.chat.helpers({
 Template.chat.events({
 	'submit #chat-form': function(e) {
 		e.preventDefault();
+		var $chatText = $('#chat-text');
 		var data = {
 			time: (new Date()).getTime(),
 			username: Meteor.user().username,
-			message: $('#chat-text').val(),
+			message: $chatText.val(),
 			index: chatIndex
 		};
 		Chat.insert(data);
 		chatIndex++;
 		Chat.remove({index: {$lt: chatIndex - chatLimit}});
 		ChatStream.emit('chat', data);
-		$('#chat-text').val('').focus();
+		$chatText.val('').focus();
 	}
 });
 
