@@ -1,4 +1,5 @@
 Fiber = Npm.require('fibers');
+GetYoutubeId = Meteor.require('get-youtube-id');
 
 var timer;
 var waitTime = 60000;
@@ -30,6 +31,18 @@ var getTitle = function (item, data) {
 	});
 };
 
+var getEmbed = function (item, data) {
+	var itemId = item;
+	var url = data.url;
+	Fiber(function () {
+		var youtube = GetYoutubeId(data.url);
+		if (youtube !== 'undefined') {
+			youtube = '<iframe src="//www.youtube.com/embed/'+youtube+'" frameborder="0" allowfullscreen></iframe>';
+			ItemQueue.update(itemId, {$set: {embed: youtube}});
+		}
+	}).run();
+};
+
 Meteor.startup(function () {
 	setTimer();
 });
@@ -41,6 +54,7 @@ Meteor.methods({
 		var item = ItemQueue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
 		var parseItem = Meteor.bindEnvironment(function () {
 			getTitle(item, data);
+			getEmbed(item, data);
 		}, function (err) {
 			throw(err);
 		});
@@ -67,24 +81,6 @@ Meteor.methods({
 				$addToSet: {upvoted: user._id},
 				$inc: {score: 1}
 			});
-		}
-	},
-  getUStream: function (url) {
-	  this.unblock();
-	  if (url !== null) {
-		  // parse ustream url, return api call
-	  }
-  },
-  getTwitch: function (url) {
-	  this.unblock();
-	  if (url !== 'undefined') {
-		  // parse twitch url, return api call
-	  }
-  },
-	getYoutube: function (url) {
-		this.unblock();
-		if (url !== 'undefined') {
-			// parse youtube url, return api call
 		}
 	},
 	nextItem: function () {
