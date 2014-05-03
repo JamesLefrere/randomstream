@@ -11,6 +11,7 @@ var getTitle = function (item, data) {
 		if (!err) {
 			var titleRegex = new RegExp(/<title[^>]*>([^<]+)<\/title>/);
 			var matchedTitle = res.content.match(titleRegex) !== null ? res.content.match(titleRegex)[1] : false;
+			matchedTitle = matchedTitle.replace(' - YouTube', '');
 		} else console.log(err);
 		Fiber(function () {
 			if (matchedTitle)
