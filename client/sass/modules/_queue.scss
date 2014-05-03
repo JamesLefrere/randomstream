@@ -17,4 +17,12 @@
 			color: $highlight !important;
 		}
 	}
+	&.is-voted {
+		.vote {
+			color: $highlight;
+			&:hover {
+				color: $body;
+			}
+		}
+	}
 }

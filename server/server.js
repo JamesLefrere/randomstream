@@ -19,13 +19,30 @@ Meteor.startup(function () {
 
 Meteor.methods({
 	queueItem: function (data) {
-		ItemQueue.insert({url: data.url, username: data.username, time: data.time, index: data.index, score: 0});
+		ItemQueue.insert({url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
 		streamQueueIndex++;
 		ItemQueue.remove({index: {$lt: streamQueueIndex - streamQueueLimit}});
 	},
-	voteItem: function (data) {
-		var item = ItemQueue.find({_id: data.id});
-		ItemQueue.update({_id: data.id}, {$inc: {score: 1}});
+	voteItem: function (itemId) {
+		var user = Meteor.user();
+		if (!user)
+			throw new Meteor.Error(401, 'Login to vote');
+		var item = ItemQueue.findOne(itemId);
+		if (!item)
+			throw new Meteor.Error(422, 'Item not found');
+
+		if (_.include(item.upvoted, user._id)) {
+			// Already voted
+			ItemQueue.update(item._id, {
+				$pull: {upvoted: user._id},
+				$inc: {score: -1}
+			});
+		} else {
+			ItemQueue.update(item._id, {
+				$addToSet: {upvoted: user._id},
+				$inc: {score: 1}
+			});
+		}
 	},
   getUStream: function (url) {
 	  this.unblock();
