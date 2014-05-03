@@ -1,9 +1,9 @@
 <template name="streamInfo">
-	<div class="stream-info">
+	<div class="overlay-section stream-info">
+		<h3 class="title">Now playing: {{stream.title}}</h3>
 		{{#with stream}}
-		<h1>{{title}}</h1>
 		<p><a href="{{url}}">{{userName}}</a></p>
-		<p>{{currentNumberOfViewers}} viewers</p>
+		<p>{{stream.currentNumberOfViewers}} viewers</p>
 		{{/with}}
 	</div>
 </template>
