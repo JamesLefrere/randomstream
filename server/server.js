@@ -1,20 +1,8 @@
 Fiber = Npm.require('fibers');
 GetYoutubeId = Meteor.require('get-youtube-id');
 
-var timer;
-var waitTime = 60000;
 var streamQueueIndex = 0;
 var streamQueueLimit = 100;
-
-var setTimer = function () {
-	timer = Meteor.setInterval(function () {
-		ItemStream.emit('newItem', Meteor.call('nextItem'));
-	}, waitTime);
-};
-
-var clearTimer = function () {
-	Meteor.clearInterval(timer);
-};
 
 var getTitle = function (item, data) {
 	var itemId = item;
@@ -31,21 +19,15 @@ var getTitle = function (item, data) {
 	});
 };
 
-var getEmbed = function (item, data) {
+var getYoutubeId = function (item, data) {
 	var itemId = item;
 	var url = data.url;
 	Fiber(function () {
 		var youtube = GetYoutubeId(data.url);
-		if (youtube !== 'undefined') {
-			youtube = '<iframe src="//www.youtube.com/embed/'+youtube+'" frameborder="0" allowfullscreen></iframe>';
-			ItemQueue.update(itemId, {$set: {embed: youtube}});
-		}
+		if (youtube !== 'undefined')
+			ItemQueue.update(itemId, {$set: {youtubeId: youtube}});
 	}).run();
 };
-
-Meteor.startup(function () {
-	setTimer();
-});
 
 Meteor.methods({
 	queueItem: function (data) {
@@ -54,7 +36,7 @@ Meteor.methods({
 		var item = ItemQueue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
 		var parseItem = Meteor.bindEnvironment(function () {
 			getTitle(item, data);
-			getEmbed(item, data);
+			getYoutubeId(item, data);
 		}, function (err) {
 			throw(err);
 		});
@@ -83,11 +65,15 @@ Meteor.methods({
 			});
 		}
 	},
+	getItem: function () {
+		var item = ItemQueue.find({}, {limit: 1, sort: {score: -1, time: -1}}).fetch();
+		console.log('sending: ' + item.title);
+		ItemStream.emit('newItem', item[0]);
+	},
 	nextItem: function () {
-		console.log('next! timer reset');
-		clearTimer();
-		setTimer();
-		// get next stream now, since we have to wait for the timer
+		console.log('next!');
+		// what else does this method need to do?
+		Meteor.call('getItem');
 	},
 	rockTheVote: function () {
 		//hmm
