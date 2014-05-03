@@ -22,6 +22,9 @@ Meteor.methods({
 		StreamQueue.insert({url: data.url, username: data.username, time: data.time, index: data.index});
 		streamQueueIndex++;
 		StreamQueue.remove({index: {$lt: streamQueueIndex - streamQueueLimit}});
+	voteItem: function (data) {
+		var item = ItemQueue.find({_id: data.id});
+		ItemQueue.update({_id: data.id}, {$inc: {score: 1}});
 	},
   getUStream: function (url) {
 	  this.unblock();
