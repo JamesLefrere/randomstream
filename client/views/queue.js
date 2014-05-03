@@ -1,10 +1,10 @@
-Template.itemQueue.helpers({
+Template.queue.helpers({
 	items: function () {
-		return ItemQueue.find({}, {sort: {score: -1, time: -1}}).fetch();
+		return Queue.find({}, {sort: {score: -1, time: -1}}).fetch();
 	}
 });
 
-Template.itemQueue.events({
+Template.queue.events({
 	'submit #queue-form': function(e) {
 		e.preventDefault();
 		var $queueUrl = $('#queue-url');
@@ -15,7 +15,7 @@ Template.itemQueue.events({
 			username: Meteor.user().username,
 			url: $queueUrl.val()
 		};
-		Meteor.call('queueItem', data);
+		Meteor.call('queueVideo', data);
 		$queueUrl.val('');
 	}
 });

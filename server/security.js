@@ -1,4 +1,4 @@
-ItemQueue.deny({
+Queue.deny({
 	insert: function() {
 		return true;
 	},
@@ -10,11 +10,11 @@ ItemQueue.deny({
 	}
 });
 
-ItemStream.permissions.write(function (eventName) {
+VideoStream.permissions.write(function (eventName) {
 	return false;
 });
 
-ItemStream.permissions.read(function (eventName) {
+VideoStream.permissions.read(function (eventName) {
 	return true;
 });
 
