@@ -1,0 +1,9 @@
+<template name="itemInfo">
+	<div class="overlay-section item-info">
+		<h3 class="title">Now playing: {{item.title}}</h3>
+		{{#with item}}
+		<p><a href="{{url}}">{{userName}}</a></p>
+		<p>{{currentNumberOfViewers}} viewers</p>
+		{{/with}}
+	</div>
+</template>

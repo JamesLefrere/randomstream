@@ -4,6 +4,6 @@ Meteor.publish('userPresence', function () {
 });
 
 
-Meteor.publish('streamQueue', function () {
-	return StreamQueue.find({}, {limit: 10});
+Meteor.publish('itemQueue', function () {
+	return ItemQueue.find({}, {limit: 10});
 });

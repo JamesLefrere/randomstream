@@ -1,2 +1,2 @@
 Meteor.subscribe('userPresence');
-Meteor.subscribe('streamQueue');
+Meteor.subscribe('itemQueue');

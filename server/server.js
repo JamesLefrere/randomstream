@@ -5,7 +5,7 @@ var streamQueueLimit = 100;
 
 var setTimer = function () {
 	timer = Meteor.setInterval(function () {
-		VideoStream.emit('newStream', Meteor.call('nextStream'));
+		ItemStream.emit('newItem', Meteor.call('nextItem'));
 	}, waitTime);
 };
 
@@ -18,10 +18,11 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-	queueStream: function (data) {
-		StreamQueue.insert({url: data.url, username: data.username, time: data.time, index: data.index});
+	queueItem: function (data) {
+		ItemQueue.insert({url: data.url, username: data.username, time: data.time, index: data.index, score: 0});
 		streamQueueIndex++;
-		StreamQueue.remove({index: {$lt: streamQueueIndex - streamQueueLimit}});
+		ItemQueue.remove({index: {$lt: streamQueueIndex - streamQueueLimit}});
+	},
 	voteItem: function (data) {
 		var item = ItemQueue.find({_id: data.id});
 		ItemQueue.update({_id: data.id}, {$inc: {score: 1}});
@@ -50,17 +51,17 @@ Meteor.methods({
 			// return api call for random youtube video
 		}
 	},
-	randomStream: function () {
+	randomNewItem: function () {
 		var randy = Math.random();
 		if (randy < 0.33) {
-			VideoStream.emit('newStream', Meteor.call('getUStream', null));
+			ItemStream.emit('newStream', Meteor.call('getUStream', null));
 		} else if (randy < 0.66) {
-			VideoStream.emit('newStream', Meteor.call('getTwitch', null));
+			ItemStream.emit('newStream', Meteor.call('getTwitch', null));
 		} else {
-			VideoStream.emit('newStream', Meteor.call('getYoutube', null));
+			ItemStream.emit('newStream', Meteor.call('getYoutube', null));
 		}
 	},
-	nextStream: function () {
+	nextItem: function () {
 		console.log('next! timer reset');
 		clearTimer();
 		setTimer();
@@ -75,7 +76,7 @@ ChatStream.on('chat', function (data) {
 	if (data.message.substring(0, 1) === '/') {
 		switch (data.message) {
 			case '/next':
-				Meteor.call('nextStream');
+				Meteor.call('nextItem');
 				break;
 			case '/rtv':
 				Meteor.call('rockTheVote');

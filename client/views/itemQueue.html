@@ -1,0 +1,16 @@
+<template name="itemQueue">
+	{{#if currentUser}}
+	<div class="overlay-section item-queue-form">
+		<h3 class="title">Add to queue</h3>
+		<form id="queue-form" action="">
+			<input type="url" name="queue-url" id="queue-url" placeholder="Submit URL (Youtube, Twitch, uStream)" />
+		</form>
+	</div>
+	{{/if}}
+	<div class="overlay-section item-queue-items">
+		<h3 class="title">Currently queued</h3>
+		{{#each items}}
+			{{> queueItem}}
+		{{/each}}
+	</div>
+</template>

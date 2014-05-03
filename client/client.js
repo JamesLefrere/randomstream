@@ -2,8 +2,8 @@ Meteor.startup(function () {
 	Hooks.init();
 });
 
-VideoStream.on('newStream', function (data) {
-	console.log('newStream');
+ItemStream.on('newItem', function (data) {
+	console.log('newItem');
 	console.log(data);
 	// need to do this on the server
 	//	var stream = data.data.results[0];
