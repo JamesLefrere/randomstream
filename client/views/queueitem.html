@@ -1,11 +1,10 @@
 <template name="queueItem">
 	<div class="queue-item {{#if isVoted}}is-voted{{/if}}">
 		<div class="queue-info">
-			<span class="username">{{username}}</span>
+			<span class="score-username">{{score}} &ndash; {{username}}</span>
 		</div>
 		<div class="content">
 			<span class="vote fa fa-thumbs-up"></span>
-			<span class="score">{{score}}</span>
 			<a href="{{url}}">{{url}}</a>
 		</div>
 	</div>
