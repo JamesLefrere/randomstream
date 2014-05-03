@@ -1,6 +1,6 @@
 Template.itemQueue.helpers({
 	items: function () {
-		return ItemQueue.find({}, {sort: {time: -1}}).fetch();
+		return ItemQueue.find({}, {sort: {score: -1, time: -1}}).fetch();
 	}
 });
 
