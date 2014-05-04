@@ -5,7 +5,7 @@ var queueIndex = 0;
 var queueLimit = 100;
 
 var getTitle = function (video, data) {
-	var videoId = item;
+	var videoId = video;
 	var url = data.url;
 	Meteor.http.get(url, function (err, res) {
 		if (!err) {
@@ -34,14 +34,14 @@ Meteor.methods({
 	queueVideo: function (data) {
 		if (!/^(http|https):\/\//i.test(data.url))
 			data.url = 'http://' + data.url;
-		var item = Queue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
-		var parseItem = Meteor.bindEnvironment(function () {
-			getTitle(item, data);
-			getYoutubeId(item, data);
+		var video = Queue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
+		var parseVideo = Meteor.bindEnvironment(function () {
+			getTitle(video, data);
+			getYoutubeId(video, data);
 		}, function (err) {
 			throw(err);
 		});
-		parseItem();
+		parseVideo();
 		queueIndex++;
 		Queue.remove({index: {$lt: queueIndex - queueLimit}});
 	},
@@ -55,12 +55,12 @@ Meteor.methods({
 
 		if (_.include(item.upvoted, user._id)) {
 			// Already voted
-			Queue.update(videoId._id, {
+			Queue.update(videoId, {
 				$pull: {upvoted: user._id},
 				$inc: {score: -1}
 			});
 		} else {
-			Queue.update(videoId._id, {
+			Queue.update(videoId, {
 				$addToSet: {upvoted: user._id},
 				$inc: {score: 1}
 			});

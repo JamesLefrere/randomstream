@@ -8,6 +8,6 @@ Template.queueItem.helpers({
 Template.queueItem.events({
 	'click .vote': function (e, t) {
 		e.preventDefault();
-		Meteor.call('voteQueueItem', t.data._id);
+		Meteor.call('voteQueueVideo', t.data._id);
 	}
 });
