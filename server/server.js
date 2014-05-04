@@ -30,6 +30,29 @@ var getYoutubeId = function (video, data) {
 	}).run();
 };
 
+Meteor.startup(function () {
+	Viewers.remove({});
+	Meteor.default_server.stream_server.register( Meteor.bindEnvironment( function(socket) {
+		var intervalID = Meteor.setInterval(function() {
+			if (socket._session.connection && socket._session.connection._meteorSession) {
+				var connection = {
+					connectionID: socket._session.connection.id,
+					connectionAddress: socket.address.address,
+					userID: socket._session.connection._meteorSession.userId
+				};
+				socket.id = socket._session.id;
+				Viewers.insert(connection);
+				Meteor.clearInterval(intervalID);
+			}
+		}, 1000);
+		socket.on('close', Meteor.bindEnvironment(function () {
+			Viewers.remove({
+				connectionID: socket.id
+			});
+		}));
+	}));
+});
+
 Meteor.methods({
 	queueVideo: function (data) {
 		if (!/^(http|https):\/\//i.test(data.url))

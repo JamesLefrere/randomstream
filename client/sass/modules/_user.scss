@@ -1,0 +1,13 @@
+#login-buttons {
+	font-size: 12px;
+}
+
+#login-dropdown-list {
+	>div {
+		@extend %clearfix;
+	}
+	input {
+		float: right;
+		clear: right;
+	}
+}

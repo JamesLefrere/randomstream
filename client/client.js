@@ -18,7 +18,6 @@ VideoStream.on('nowPlaying', function (data) {
 });
 
 Deps.autorun(function (c) {
-	console.log('autorun');
 	if (Session.equals('YTApiReady', false)
 		|| Session.equals('videoRendered', false)
 		|| Session.get('nowPlaying') === 'undefined') {
@@ -37,19 +36,17 @@ Deps.autorun(function (c) {
 		document.getElementById('video-wrapper').appendChild(playerDiv);
 
 		player = null;
-		player = new YT.Player('video', {
-			videoId: video.youtubeId,
-			events: {
-				'onReady': onPlayerReady
-			}
-		});
-		Meteor.clearInterval(interval);
+		if (video !== undefined) {
+			player = new YT.Player('video', {
+				videoId: video.youtubeId,
+				events: {
+					'onReady': onPlayerReady
+				}
+			});
+			Meteor.clearInterval(interval);
+		}
 	}, 1500);
 });
-
-
-//player.playVideo();
-console.log(player);
 
 Accounts.ui.config({
 	passwordSignupFields: 'USERNAME_ONLY'
@@ -57,6 +54,11 @@ Accounts.ui.config({
 
 Hooks.onLoggedIn = function () {
 	Meteor.setTimeout(function () {
-		$('#chat-text').removeAttr('disabled').focus();
+		var $chatText = $('#chat-text');
+		$chatText.textareaAutoSize();
+		$chatText.shiftenter({
+			hint: null
+		});
+		$chatText.removeAttr('disabled').focus();
 	}, 1500);
 };
