@@ -1,3 +1,9 @@
+var player;
+
+var onPlayerReady = function () {
+	player.playVideo();
+};
+
 Meteor.startup(function () {
 	Hooks.init();
 	Session.set('YTApiReady', false);
@@ -7,18 +13,24 @@ onYouTubeIframeAPIReady = function () {
 	Session.set('YTApiReady', true);
 };
 
-VideoStream.on('newItem', function (data) {
-	Session.set('youtubeId', data.youtubeId);
+VideoStream.on('nowPlaying', function (data) {
+	Session.set('nowPlaying', data);
+});
 
-	if (Session.equals('YTApiReady', false))
+Deps.autorun(function (c) {
+	console.log('autorun');
+	if (Session.equals('YTApiReady', false)
+		|| Session.equals('videoRendered', false)
+		|| Session.get('nowPlaying') === 'undefined') {
 		return;
+	}
 
 	var interval = Meteor.setInterval(function () {
-		if (!document.getElementById('video'))
+		if(!document.getElementById('video')) {
 			return;
-
+		}
 		var playerDiv = document.createElement('div'),
-			youtubeId = Session.get('youtubeId');
+			video = Template.video.getVideo();
 
 		playerDiv.id = 'video';
 		document.getElementById('video-wrapper').innerHTML = '';
@@ -26,14 +38,18 @@ VideoStream.on('newItem', function (data) {
 
 		player = null;
 		player = new YT.Player('video', {
-			videoId: youtubeId
-			//			events: {
-			//				'onReady': onPlayerReady
-			//			}
+			videoId: video.youtubeId,
+			events: {
+				'onReady': onPlayerReady
+			}
 		});
 		Meteor.clearInterval(interval);
-	}, 1000);
+	}, 1500);
 });
+
+
+//player.playVideo();
+console.log(player);
 
 Accounts.ui.config({
 	passwordSignupFields: 'USERNAME_ONLY'
