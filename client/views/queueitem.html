@@ -1,10 +1,13 @@
 <template name="queueItem">
-	<div class="queue-item {{#if isVoted}}is-voted{{/if}}">
+	<div class="queue-item{{#if isVoted}} is-voted{{/if}}{{#if isPlaying}} is-playing{{/if}}">
 		<div class="queue-info">
 			<span class="score-username">{{score}} &ndash; {{username}}</span>
 		</div>
 		<div class="content">
 			<span class="vote fa fa-thumbs-up"></span>
+			{{#if isPlaying}}
+			<span>Now playing: </span>
+			{{/if}}
 			<a href="{{url}}">{{title}}</a>
 		</div>
 	</div>

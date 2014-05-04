@@ -26,4 +26,10 @@
 			}
 		}
 	}
+	&.is-playing {
+		.content {
+			padding: 5px;
+			background: rgba($fade, 0.5);
+		}
+	}
 }

@@ -1,14 +1,14 @@
 <template name="queue">
 	{{#if currentUser}}
 	<div class="overlay-section item-queue-form">
-		<h3 class="title">Add to queue</h3>
+		<h3 class="title">Suggest a video</h3>
 		<form id="queue-form" action="">
 			<input type="url" name="queue-url" id="queue-url" placeholder="Enter a Youtube URL here" />
 		</form>
 	</div>
 	{{/if}}
 	<div class="overlay-section item-queue-items">
-		<h3 class="title">Currently queued</h3>
+		<h3 class="title">Playlist &ndash; {{currentViewers}} viewers</h3>
 		{{#each items}}
 			{{> queueItem}}
 		{{/each}}
