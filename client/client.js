@@ -55,10 +55,6 @@ Accounts.ui.config({
 Hooks.onLoggedIn = function () {
 	Meteor.setTimeout(function () {
 		var $chatText = $('#chat-text');
-		$chatText.textareaAutoSize();
-		$chatText.shiftenter({
-			hint: null
-		});
-		$chatText.removeAttr('disabled').focus();
+		$chatText.removeAttr('disabled');
 	}, 1500);
 };
