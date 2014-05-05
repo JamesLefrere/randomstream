@@ -28,6 +28,11 @@ Template.chat.events({
 		Chat.remove({index: {$lt: chatIndex - chatLimit}});
 		ChatStream.emit('chat', data);
 		$chatText.val('').focus();
+			if (data.message === 'rtv') {
+				Meteor.call('rockTheVote', Meteor.user().username);
+			} else {
+				ChatStream.emit('chat', data);
+			}
 	}
 });
 

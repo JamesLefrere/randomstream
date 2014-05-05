@@ -4,6 +4,7 @@ GetYoutubeId = Meteor.require('get-youtube-id');
 var queueIndex = 0;
 var queueLimit = 100;
 var timer;
+var voters = 0;
 ServerSession.set('nowPlaying', null);
 
 var getInfo = function (video, data) {
@@ -94,20 +95,32 @@ Meteor.methods({
 	gibeVideoPlox: function () {
 		return ServerSession.get('nowPlaying');
 	},
-	rockTheVote: function () {
-		//hmm
-	}
-});
-
-ChatStream.on('chat', function (data) {
-	if (data.message.substring(0, 1) === '/') {
-		switch (data.message) {
-			case '/next':
-				Meteor.call('nextVideo');
-				break;
-			case '/rtv':
-				Meteor.call('rockTheVote');
-				break;
+	rockTheVote: function (username) {
+		voters++;
+		var filter = { userId: { $exists: true }};
+		var electorate = Presences.find(filter, {fields: {state: true, userId: true}}).fetch().length;
+		var data = {
+			time: (new Date()).getTime(),
+			username: null,
+			message: username + ' wants to rock the vote (' + voters + '/' + electorate + ')',
+			index: 0
+		};
+		ChatStream.emit('chat', data);
+		if (voters === electorate) {
+			Queue.update(ServerSession.get('nowPlaying')._id, {$inc: {plays: 1}}, function (err, res) {
+				if (!err) {
+					Meteor.setTimeout(function () {
+						var data = {
+							time: (new Date()).getTime(),
+							username: null,
+							message: 'Vote successful.',
+							index: 0
+						};
+						ChatStream.emit('chat', data);
+						Meteor.call('startVideo');
+					}, 500);
+				} else console.log(err);
+			});
 		}
 	}
 });

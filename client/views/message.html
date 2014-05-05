@@ -1,6 +1,8 @@
 <template name="message">
 	<div class="message {{#if isMe}}is-me{{/if}}">
+		{{#if username}}
 		<span class="username">{{username}}</span>
+		{{/if}}
 		<span class="content">
 			{{message}}
 		</span>
