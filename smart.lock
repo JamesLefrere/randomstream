@@ -12,7 +12,8 @@
       "presence": {},
       "font-awesome": {},
       "session-extended-api": {},
-      "event-hooks": {}
+      "event-hooks": {},
+      "server-session": {}
     },
     "packages": {
       "iron-router": {
@@ -49,6 +50,11 @@
         "git": "https://github.com/BenjaminRH/meteor-event-hooks.git",
         "tag": "v1.4.3",
         "commit": "ba4f3d7887748458618d29615492906f0c88d31c"
+      },
+      "server-session": {
+        "git": "https://github.com/matteodem/meteor-server-session.git",
+        "tag": "v0.4.1",
+        "commit": "c07427304f099f837991e5def23bce4a5cfa9054"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

@@ -10,6 +10,7 @@
     "presence": {},
     "font-awesome": {},
     "session-extended-api": {},
-    "event-hooks": {}
+    "event-hooks": {},
+    "server-session": {}
   }
 }

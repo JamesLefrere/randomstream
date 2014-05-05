@@ -10,3 +10,4 @@ presence
 font-awesome
 session-extended-api
 event-hooks
+server-session
