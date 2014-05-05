@@ -8,9 +8,10 @@
 	</div>
 	{{/if}}
 	<div class="overlay-section item-queue-items">
-		<h3 class="title">Playlist &ndash; {{currentViewers}} viewers</h3>
-		{{#each items}}
-			{{> queueItem}}
-		{{/each}}
+		<div class="queue-inner">
+			{{#each items}}
+				{{> queueItem}}
+			{{/each}}
+		</div>
 	</div>
 </template>

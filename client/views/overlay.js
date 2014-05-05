@@ -7,9 +7,3 @@ Template.overlay.events({
 		Session.toggle('overlayHidden');
 	}
 });
-
-Template.overlay.helpers({
-	overlayHidden: function () {
-		return Session.get('overlayHidden');
-	}
-});

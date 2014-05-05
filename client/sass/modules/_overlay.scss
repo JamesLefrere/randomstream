@@ -10,7 +10,7 @@
 	.fa-toggle-left {
 		display: none;
 	}
-	&.hidden {
+	.overlay-hidden & {
 		right: -320px;
 		.fa-toggle-right {
 			display: none;

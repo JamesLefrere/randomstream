@@ -1,9 +1,3 @@
-Template.video.helpers({
-	getVideo: function () {
-		return Session.get('nowPlaying');
-	}
-});
-
 Template.video.created = function () {
 	if (typeof player === 'undefined')
 		$.getScript('https://www.youtube.com/iframe_api', function () {});
