@@ -19,25 +19,28 @@ Template.chat.helpers({
 });
 
 Template.chat.events({
-	'submit #chat-form': function(e) {
-		e.preventDefault();
-		var $chatText = $('#chat-text');
-		var data = {
-			time: (new Date()).getTime(),
-			username: Meteor.user().username,
-			message: $chatText.val(),
-			index: chatIndex
-		};
-		Chat.insert(data);
-		chatIndex++;
-		Chat.remove({index: {$lt: chatIndex - chatLimit}});
-		ChatStream.emit('chat', data);
-		$chatText.val('').focus();
+	'keydown #chat-text': function(e) {
+		if (e.which === 13) {
+			e.preventDefault();
+			var $chatText = $('#chat-text');
+			if ($chatText.val() === '')
+				return false;
+			var data = {
+				time: (new Date()).getTime(),
+				username: Meteor.user().username,
+				message: $chatText.val(),
+				index: chatIndex
+			};
+			Chat.insert(data);
+			chatIndex++;
+			Chat.remove({index: {$lt: chatIndex - chatLimit}});
 			if (data.message === 'rtv') {
 				Meteor.call('rockTheVote', Meteor.user().username);
 			} else {
 				ChatStream.emit('chat', data);
 			}
+			$chatText.val('').focus();
+		}
 	}
 });
 
@@ -45,9 +48,6 @@ Template.chat.rendered = function () {
 	Meteor.setTimeout(function () {
 		var $chatText = $('#chat-text');
 		$chatText.textareaAutoSize();
-		$chatText.shiftenter({
-			hint: null
-		});
 		$chatText.removeAttr('disabled');
 		Template.chat.resize();
 	}, 1500);
