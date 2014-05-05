@@ -3,6 +3,13 @@
 	margin: 0;
 }
 
+.queue-inner {
+	height: 200px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 10px;
+}
+
 .queue-item {
 	.content {
 		font-size: 12px;
@@ -27,9 +34,24 @@
 		}
 	}
 	&.is-playing {
+		margin: 10px 0;
 		.content {
 			padding: 5px;
-			background: rgba($fade, 0.5);
+			border: 1px rgba($fade, 0.3) solid;
+			position: relative;
+		}
+		.title {
+			z-index: 1;
+			position: relative;
+		}
+		.progress {
+			position: absolute;
+			z-index: -1;
+			background: rgba($link, 0.5);
+			top: 0;
+			bottom: 0;
+			left: 0;
+			width: 0;
 		}
 	}
 }
