@@ -1,12 +1,23 @@
 var player;
 
-var onPlayerReady = function () {
+var onPlayerReady = function (event) {
 	player.playVideo();
+	Meteor.setTimeout(function () {
+		player.seekTo(Session.get('nowPlaying').seek + 1);
+	}, 1000);
 };
 
 Meteor.startup(function () {
 	Hooks.init();
 	Session.set('YTApiReady', false);
+	Session.set('rockedTheVote', false);
+	Meteor.setTimeout(function () {
+		Meteor.call('gibeVideoPlox', function (err, res) {
+			if (!err) {
+				Session.set('nowPlaying', res);
+			} else console.log(err);
+		});
+	}, 100);
 });
 
 onYouTubeIframeAPIReady = function () {
@@ -23,13 +34,12 @@ Deps.autorun(function (c) {
 		|| Session.get('nowPlaying') === 'undefined') {
 		return;
 	}
-
 	var interval = Meteor.setInterval(function () {
 		if(!document.getElementById('video')) {
 			return;
 		}
-		var playerDiv = document.createElement('div'),
-			video = Template.video.getVideo();
+		var playerDiv = document.createElement('div');
+		var video = Session.get('nowPlaying');
 
 		playerDiv.id = 'video';
 		document.getElementById('video-wrapper').innerHTML = '';
@@ -39,6 +49,16 @@ Deps.autorun(function (c) {
 		if (video !== undefined) {
 			player = new YT.Player('video', {
 				videoId: video.youtubeId,
+				playerVars: {
+					controls: 0,
+					modestbranding: 1,
+					disablekb: 1,
+					enablejsapi: 1,
+					iv_load_policy: 3,
+					playsinline: 1,
+					rel: 0,
+					showinfo: 0
+				},
 				events: {
 					'onReady': onPlayerReady
 				}
@@ -57,4 +77,11 @@ Hooks.onLoggedIn = function () {
 		var $chatText = $('#chat-text');
 		$chatText.removeAttr('disabled');
 	}, 1500);
+};
+
+Presence.state = function() {
+	return {
+		online: true,
+		rockedTheVote: Session.get('rockedTheVote')
+	};
 };
