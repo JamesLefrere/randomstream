@@ -6,7 +6,3 @@ Meteor.publish('userPresence', function () {
 Meteor.publish('queue', function () {
 	return Queue.find({}, {limit: 10, sort: {score: -1, time: -1}});
 });
-
-Meteor.publish('viewers', function () {
-	return Viewers.find();
-});
