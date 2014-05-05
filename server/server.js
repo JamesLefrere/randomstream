@@ -3,6 +3,8 @@ GetYoutubeId = Meteor.require('get-youtube-id');
 
 var queueIndex = 0;
 var queueLimit = 100;
+var timer;
+ServerSession.set('nowPlaying', null);
 
 var getInfo = function (video, data) {
 	var videoId = video;
@@ -23,12 +25,32 @@ var getInfo = function (video, data) {
 	}).run();
 };
 
+var setTimer = function () {
+	timer = Meteor.setInterval(function () {
+		var video = ServerSession.get('nowPlaying');
+		if (video.seek < video.length) {
+			video.seek++;
+			console.log(video.seek + '/' + video.length);
+			ServerSession.set('nowPlaying', video);
+		} else {
+			clearTimer();
+			Meteor.setTimeout(function () {
+				Meteor.call('startVideo');
+			}, 3000);
+		}
+	}, 1000);
+};
+
+var clearTimer = function () {
+	Meteor.clearInterval(timer);
+};
 
 Meteor.methods({
 	queueVideo: function (data) {
+		// need to validate for youtube url
 		if (!/^(http|https):\/\//i.test(data.url))
 			data.url = 'http://' + data.url;
-		var video = Queue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
+		var video = Queue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: [], plays: 0});
 		var parseVideo = Meteor.bindEnvironment(function () {
 			getInfo(video, data);
 		}, function (err) {
@@ -59,14 +81,18 @@ Meteor.methods({
 			});
 		}
 	},
-	sendVideo: function () {
-		var item = Queue.find({}, {limit: 1, sort: {score: -1, time: -1}}).fetch();
-		VideoStream.emit('nowPlaying', item[0]);
+	startVideo: function () {
+		var video = Queue.find({}, {limit: 1, sort: {plays: 1, score: -1, time: -1}}).fetch()[0];
+		video.seek = 0;
+		ServerSession.set('nowPlaying', video);
+		VideoStream.emit('nowPlaying', ServerSession.get('nowPlaying'));
+		Queue.update(ServerSession.get('nowPlaying')._id, {$inc: {plays: 1}});
+		clearTimer();
+		setTimer();
+		voters = 0;
 	},
-	nextVideo: function () {
-		console.log('next!');
-		// what else does this method need to do?
-		Meteor.call('sendVideo');
+	gibeVideoPlox: function () {
+		return ServerSession.get('nowPlaying');
 	},
 	rockTheVote: function () {
 		//hmm
