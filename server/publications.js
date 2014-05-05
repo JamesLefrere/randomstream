@@ -4,5 +4,5 @@ Meteor.publish('userPresence', function () {
 });
 
 Meteor.publish('queue', function () {
-	return Queue.find({}, {limit: 10, sort: {score: -1, time: -1}});
+	return Queue.find({}, {limit: 10, sort: {plays: 1, score: -1, time: -1}});
 });

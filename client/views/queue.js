@@ -1,11 +1,6 @@
 Template.queue.helpers({
 	items: function () {
-		return Queue.find({}, {sort: {score: -1, time: -1}}).fetch();
-	},
-	currentViewers: function () {
-		if (Viewers.find() !== undefined) {
-			return Viewers.find().fetch().length;
-		}
+		return Queue.find().fetch();
 	}
 });
 
