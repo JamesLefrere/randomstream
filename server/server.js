@@ -4,29 +4,22 @@ GetYoutubeId = Meteor.require('get-youtube-id');
 var queueIndex = 0;
 var queueLimit = 100;
 
-var getTitle = function (video, data) {
-	var videoId = video;
-	var url = data.url;
-	Meteor.http.get(url, function (err, res) {
-		if (!err) {
-			var titleRegex = new RegExp(/<title[^>]*>([^<]+)<\/title>/);
-			var matchedTitle = res.content.match(titleRegex) !== null ? res.content.match(titleRegex)[1] : false;
-			matchedTitle = matchedTitle.replace(' - YouTube', '');
-		} else console.log(err);
-		Fiber(function () {
-			if (matchedTitle)
-				Queue.update(videoId, {$set: {title: matchedTitle}});
-		}).run();
-	});
-};
-
-var getYoutubeId = function (video, data) {
+var getInfo = function (video, data) {
 	var videoId = video;
 	var url = data.url;
 	Fiber(function () {
 		var youtube = GetYoutubeId(data.url);
-		if (youtube !== 'undefined')
-			Queue.update(videoId, {$set: {youtubeId: youtube}});
+		if (youtube === undefined) {
+			throw new Meteor.Error(422, 'Could not parse video');
+		} else {
+			Meteor.http.get('http://gdata.youtube.com/feeds/api/videos/' + youtube + '?alt=json', function (err, res) {
+				if (!err) {
+					var title = res.data.entry.title.$t;
+					var length = res.data.entry.media$group.yt$duration.seconds;
+					Queue.update(videoId, {$set: {youtubeId: youtube, title: title, length: length}});
+				} else throw new Meteor.Error(422, 'Could not get video information');
+			});
+		}
 	}).run();
 };
 
@@ -37,8 +30,7 @@ Meteor.methods({
 			data.url = 'http://' + data.url;
 		var video = Queue.insert({title: data.url, url: data.url, username: data.username, time: data.time, index: data.index, score: 0, upvoted: []});
 		var parseVideo = Meteor.bindEnvironment(function () {
-			getTitle(video, data);
-			getYoutubeId(video, data);
+			getInfo(video, data);
 		}, function (err) {
 			throw(err);
 		});
