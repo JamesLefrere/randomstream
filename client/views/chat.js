@@ -10,6 +10,11 @@ ChatStream.on('chat', function (data) {
 Template.chat.helpers({
 	messages: function () {
 		return Chat.find({}, {sort: {time: -1}});
+	},
+	viewers: function () {
+		if (Presences.find() !== undefined) {
+			return Presences.find().fetch().length;
+		}
 	}
 });
 
